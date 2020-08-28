@@ -10,6 +10,7 @@ from imutils import contours
 import numpy as np
 import imutils
 import cv2
+import requests
 
 # Function to show array of images (intermediate results)
 def show_images(images):
@@ -18,7 +19,23 @@ def show_images(images):
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
 
-img_path = "images/example_02.jpg"
+# img_remove_bg = "images/tree2.jpg"
+
+# response = requests.post(
+#     'https://api.remove.bg/v1.0/removebg',
+#     files={'image_file': open(img_remove_bg, 'rb')},
+#     data={'size': 'auto'},
+#     headers={'X-Api-Key': 'GY6EVhsmUa1dWcyVCYntpqJ7'},
+# )
+# if response.status_code == requests.codes.ok:
+#     with open('images/result.png', 'wb') as out:
+#     	out.write(response.content)
+# else:
+#     print("Error:", response.status_code, response.text)
+
+# img_path = 'images/result.png'
+
+img_path = "images/tree4.png"
 
 # Read image and preprocess
 image = cv2.imread(img_path)
@@ -26,11 +43,12 @@ image = cv2.imread(img_path)
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 blur = cv2.GaussianBlur(gray, (9, 9), 0)
 
-edged = cv2.Canny(blur, 50, 100)
+# edged = cv2.Canny(blur, 50, 100)
+edged = cv2.Canny(blur, 100, 120)
 edged = cv2.dilate(edged, None, iterations=1)
 edged = cv2.erode(edged, None, iterations=1)
 
-#show_images([blur, edged])
+show_images([blur, edged])
 
 # Find contours
 cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -56,7 +74,7 @@ box = np.array(box, dtype="int")
 box = perspective.order_points(box)
 (tl, tr, br, bl) = box
 dist_in_pixel = euclidean(tl, tr)
-dist_in_cm = 2
+dist_in_cm = 11.3
 pixel_per_cm = dist_in_pixel/dist_in_cm
 
 # Draw remaining contours
