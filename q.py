@@ -43,7 +43,7 @@ print('okeeeeeeeeeee')
 import cv2
 import numpy as np
 import math
-image = cv2.imread("14.jpg")
+image = cv2.imread("test.jpg")
 image = cv2.resize(image,(600,600))
 hsv = cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
 lower_red = np.array([1,11,32])
